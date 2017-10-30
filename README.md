@@ -40,4 +40,4 @@ AutoFinder_2.3F
 Copy AutoFinder文件夹到工作目录
 Copy phantomjs文件到工作目录（可直接在官网下载,由于移动招标网采用反爬虫异步加载，不部署此文件会影响移动数据抓取）
 运行命令 python3 getdata.py
-#隐式加载nohup -u python3 getdata.py &
+#隐式加载nohup python3 -u getdata.py &
