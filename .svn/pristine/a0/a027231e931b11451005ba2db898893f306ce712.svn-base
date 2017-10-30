@@ -1,0 +1,46 @@
+﻿[business]
+#关键省分
+province_keywords = 北京, 山西, 河北, 湖北, 辽宁, 新疆, 江西, 内蒙, 浙江, 广州, 海南, 安徽
+
+#所有省分
+all_province_keywords = 北京, 广东, 山东, 江苏, 河南, 上海, 河北, 浙江, 香港, 陕西, 湖南, 重庆, 福建, 天津, 云南, 四川,广西, 安徽, 海南, 江西, 湖北, 山西, 辽宁, 台湾, 黑龙江, 内蒙古, 澳门, 贵州, 甘肃, 青海, 新疆,西藏, 吉林, 宁夏
+
+#关键字排查
+business_keywords = 客服, 呼叫, 外呼, 微信, 公众号, 互联网, 工单, 接续, 短信平台, 自媒体,客户服务系统,语音分析,智能语音,语音导航,互联网客服,机器人,存量经营,IVR,知识库
+
+
+[email_details]
+flag = 1 #是否分别发送  1：发送     0：不发送
+beijing = maqiang@hollycrm.com    #北京
+guangdong = None    #广东
+shandong = None     #山东
+jiangsu = None    #江苏
+henan = None    #河南
+shanghai = None    #上海
+hebei = maqiang@hollycrm.com    #河北
+zhejiang = None    #浙江
+xianggang = None    #香港
+shanxi = maqiang@hollycrm.com    #山西
+hunan = None    #湖南
+chongqing = None    #重庆
+fujian = None    #附件
+tianjin = None    #天津
+yunnan = None    #云南
+sichuan = None    #四川
+guangxi = None    #广西
+anhui = None    #安徽
+hainan = None    #海南
+jiangxi = None    #江西
+hubei = None    #湖北
+liaoning = None    #辽宁
+taiwan = None    #台湾
+heilongjiang = None    #黑龙江
+neimenggu = maqiang@hollycrm.com    #内蒙古
+aomen = None    #澳门
+guizhou = None    #贵州
+gansu = None    #甘肃
+qinghai = None    #青海
+xinjiang = None    #新疆
+xizang = None    #西藏
+jilin = None    #吉林
+ningxia = None    #宁夏
