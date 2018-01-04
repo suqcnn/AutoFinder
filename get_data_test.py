@@ -1,10 +1,9 @@
-﻿import os
+import os
 import re
 import time
 import socket
 import platform
 import urllib.request
-import requests
 import requests.packages.urllib3.util.ssl_
 from my_package.pemail import PEmail
 from my_package import crawler
@@ -13,19 +12,23 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 socket.setdefaulttimeout(8)
-admin_mail = PEmail('get_data_server@hollycrm.com',                   # 发件地址
-                    'lill@hollycrm.com',                              # 收件地址（多个用逗号分隔）
-                    'zhaojd@hollycrm.com,maqiang@hollycrm.com,masn@hollycrm.com,wanghs@hollycrm.com,Zhangbo2@hollycrm.com,liying1@hollycrm.com,huanggy@hollycrm.com,lizhe@hollycrm.com,liyl@hollycrm.com,yuxiao1@hollycrm.com',    # 抄送地址（多个用逗号分隔）
-                    'smtp.hollycrm.com',                              # 发件服务器
-                    '12345678Az')                                     # 发件邮箱密码
+
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
+admin_mail = PEmail('get_data_server@hollycrm.com',  # 发件地址
+                    'lill@hollycrm.com',  # 收件地址（多个用逗号分隔）
+                    'zhaojd@hollycrm.com,maqiang@hollycrm.com,masn@hollycrm.com,wanghs@hollycrm.com,liyl@hollycrm.com,yuxiao1@hollycrm.com',
+                    # 抄送地址（多个用逗号分隔）
+                    'smtp.hollycrm.com',  # 发件服务器
+                    '12345678Az')  # 发件邮箱密码
 mails = [admin_mail]
 
 province_keywords = ['北京', '山西', '河北', '湖北', '辽宁', '新疆', '江西', '内蒙', '浙江', '广州', '海南', '安徽']
-all_province_keywords = ['北京', '广东', '山东', '江苏', '河南', '上海', '河北', '浙江', '香港', '陕西', '湖南', '重庆', '福建', '天津', '云南', '四川',
-                          '广西', '安徽', '海南', '江西', '湖北', '山西', '辽宁', '台湾', '黑龙江', '内蒙古', '澳门', '贵州', '甘肃', '青海', '新疆',
+all_province_keywords = ['北京', '广东', '山东', '江苏', '河南', '上海', '河北', '浙江', '香港', '陕西', '湖南', '重庆', '福建', '天津', '云南',
+                         '四川',
+                         '广西', '安徽', '海南', '江西', '湖北', '山西', '辽宁', '台湾', '黑龙江', '内蒙古', '澳门', '贵州', '甘肃', '青海', '新疆',
                          '西藏', '吉林', '宁夏']
-business_keywords = ['AI', 'IVR', 'NPS', '拨测', '存量', '电渠', '电子渠道', '短信', '多媒体', '分析', '服务预判', '工单', '公众号', '固网', '呼叫', '互联网', '回访', '稽核', '集成', '监控', '接续', '精准服务', '客服', '宽带', '门户', '模型', '全媒体', '人工', '数据', '调查', '投诉', '挖掘', '外包', '外呼', '微信', '维系', '协助运营', '一体化', '营销', '用户行为', '舆情', '运营', '知识库', '质检', '智慧', '智能', '自媒体']
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
+business_keywords = ['客服', '呼叫', '外呼', '微信', '公众号', '互联网', '工单', '接续', '短信平台', '自媒体', '稽核', '集成']
+
 
 def sleeptime(hour, min, sec):  # 休眠时间设置
     return hour * 3600 + min * 60 + sec
@@ -33,12 +36,13 @@ def sleeptime(hour, min, sec):  # 休眠时间设置
 def send_all(mail_content, mail_title):
     for value in mails:
         try:
-            value.send_mail(mail_content, mail_title)
-            crawler.log('发送邮件给 ' + value.to_addr + ':' + mail_content[:int(len(mail_content)/4)] + '...')
+            #value.send_mail(mail_content, mail_title)
+            print('发送邮件给 ' + value.to_addr + ':' + mail_content[:int(len(mail_content)/4)] + '...')
         except Exception as err:
-            crawler.log('发送给'+ value.to_addr + '的邮件发送出现问题')
-            crawler.log(err, 0)
+            print('发送给'+ value.to_addr + '的邮件发送出现问题')
+            print(err, 0)
             # time.sleep(tmp)
+
 
 # 中国电信招标项目列表
 telecom_project_list = {}
@@ -48,6 +52,7 @@ chinaunicom_project_list = {}
 chinamobile_project_list = {}
 # 中国铁塔招标项目列表
 chinatower_project_list = {}
+
 
 def seach_telecom_project():
     # 中国电信阳光采购网网址
@@ -235,7 +240,6 @@ def seach_chinamobile_project():
         crawler.log(err, 0)
     crawler.log("完成抓取，目前【移动】共抓取：" + str(len(chinamobile_project_list)) + "条记录")
 
-
 def get_tower(_url, _headers, _payload):
     response = requests.post(_url, headers=_headers, data=_payload,).json()['obpNotice']
     return response
@@ -264,17 +268,17 @@ def seach_chinatower_project():
         original_links = get_tower(tower_url, tower_headers, tower_payload)
     except Exception as err:
         crawler.log(err, 0)
-
     try:
         for value in original_links:
+            print(value)
             # 代码统一，把url和title都转成list，下面的代码就不用改了
             url = [value['id']]
             title = [value['notice_title']]
             if len(title) and len(url):
-                if not (title[0] in chinatower_project_list):
-                    chinatower_project_list[title[0]] = url[0]
+                if not (title[0] in chinaunicom_project_list):
+                    chinaunicom_project_list[title[0]] = url[0]
                     temp_text = "http://www.tower.com.cn/default/main/index/noticedetail.jsp?_operation=notice&_notice=6&_id="
-                    temp_text = temp_text + str(chinatower_project_list[title[0]])
+                    temp_text = temp_text + str(chinaunicom_project_list[title[0]])
                     txt = r'招标信息：' + title[0] + ' ,\n链接：' + temp_text
                     logtxt = r'招标信息：' + title[0]
                     crawler.log(logtxt, 0)
@@ -296,14 +300,17 @@ def seach_chinatower_project():
                             send_all(txt, '可能是重点项目 请注意')  # 判断是否是重点类型项目
     except Exception as err:
         crawler.log(err, 0)
-    crawler.log("完成抓取，目前【铁塔】共抓取：" + str(len(chinatower_project_list)) + "条记录")
+    crawler.log("完成抓取，目前【铁塔】共抓取：" + str(len(chinaunicom_project_list)) + "条记录")
+
 
 if __name__ == "__main__":
+
     second = sleeptime(0, 3, 0)
     tmp = sleeptime(0, 0, 10)
     crawler.log('系统启动', 0)
     flag = 0
     while True:
+        '''
         try:
             seach_telecom_project()  # 电信
         except Exception as err:
@@ -321,12 +328,13 @@ if __name__ == "__main__":
         except Exception as err:
             crawler.log('抓取移动项目出现问题,请检查网络连接')
             crawler.log(err, 0)
+        '''
+
         try:
             seach_chinatower_project()  # 铁塔
         except Exception as err:
             crawler.log('抓取铁塔项目出现问题,请检查网络连接')
             crawler.log(err, 0)
-
         print(time.strftime('%Y-%m-%d %H:%M:%S'))
         crawler.log('三分钟后再次抓取信息')
 
